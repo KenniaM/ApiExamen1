@@ -15,7 +15,10 @@ namespace ApiExamen1.Models
         public string Phone { get; set; }
 
         public int CourseId { get; set; }
-
+        [ForeignKey("CourseId")]
+        
         public Course Course { get; set; }
+
+        
     }
 }
