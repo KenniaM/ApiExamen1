@@ -58,8 +58,11 @@ namespace ApiExamen.Controllers
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-      var students = await _context.Students.Include(s => s.Course).ToListAsync();
-      return Ok(students.Select(s => s.ToDto()));
+      var students = await _context.Students
+                                  .Include(s => s.Course) 
+                                  .ToListAsync();
+
+    return Ok(students.Select(s => s.ToDto()));
     }
 
     

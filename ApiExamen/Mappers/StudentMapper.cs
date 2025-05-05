@@ -13,7 +13,8 @@ namespace ApiExamen.Mappers
         Name = StudentItem.Name,
         Email = StudentItem.Email,
         Phone = StudentItem.Phone,
-        CourseId = StudentItem.CourseId
+        CourseId = StudentItem.CourseId,
+        CourseName = StudentItem.Course?.Name 
 
       };
     }

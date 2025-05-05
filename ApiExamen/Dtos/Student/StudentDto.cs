@@ -14,6 +14,6 @@ namespace ApiExamen.Dtos.Student
 
         public int CourseId { get; set; }
 
-        public Course Course { get; set; }
+        public string CourseName { get; set; }
   }
 }
