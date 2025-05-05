@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kenia\\OneDrive\\Escritorio\\ApiExamen\\ApiExamen.csproj": {}
+    "C:\\Users\\Usuario\\Desktop\\Moviles\\RepositorioExamen\\ApiExamen1\\ApiExamen\\ApiExamen.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kenia\\OneDrive\\Escritorio\\ApiExamen\\ApiExamen.csproj": {
+    "C:\\Users\\Usuario\\Desktop\\Moviles\\RepositorioExamen\\ApiExamen1\\ApiExamen\\ApiExamen.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kenia\\OneDrive\\Escritorio\\ApiExamen\\ApiExamen.csproj",
+        "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\Moviles\\RepositorioExamen\\ApiExamen1\\ApiExamen\\ApiExamen.csproj",
         "projectName": "ApiExamen",
-        "projectPath": "C:\\Users\\kenia\\OneDrive\\Escritorio\\ApiExamen\\ApiExamen.csproj",
-        "packagesPath": "C:\\Users\\kenia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kenia\\OneDrive\\Escritorio\\ApiExamen\\obj\\",
+        "projectPath": "C:\\Users\\Usuario\\Desktop\\Moviles\\RepositorioExamen\\ApiExamen1\\ApiExamen\\ApiExamen.csproj",
+        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Usuario\\Desktop\\Moviles\\RepositorioExamen\\ApiExamen1\\ApiExamen\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kenia\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -48,6 +48,22 @@
               "target": "Package",
               "version": "[9.0.4, )"
             },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[8.1.1, )"
@@ -72,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

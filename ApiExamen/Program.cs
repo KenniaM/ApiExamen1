@@ -1,4 +1,15 @@
+using ApiExamen1.Data;
+
+using Microsoft.Extensions.FileProviders;
+
+using Microsoft.EntityFrameworkCore;
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Registrar ApplicationDbContext
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Agregar servicios al contenedor
 builder.Services.AddControllers();
@@ -25,6 +36,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
 
 var summaries = new[]
 {
