@@ -30,11 +30,8 @@ namespace ApiExamen.Controllers
         {
             var courses = await _context.Courses.ToListAsync();
 
-            return Ok(new
-            {
-                message = "Cursos obtenidos correctamente",
-                data = courses.Select(c => c.ToDto())
-            });
+
+            return Ok(courses);
         }
 
         //endpoint obtener por curso
@@ -43,126 +40,93 @@ namespace ApiExamen.Controllers
         {
             var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == courseId);
 
-
             if (course == null)
             {
                 return NotFound(new { message = "Curso no encontrado" });
             }
 
-
-            return Ok(new
-            {
-                message = "Curso obtenido correctamente",
-                data = course.ToDto()
-            });
+            return Ok(course.ToDto());
         }
 
-        //endpoint crear un nuevo curso curso
 
+        //endpoint crear un nuevo curso curso
         [HttpPost]
-        public async Task<IActionResult> CreateCourse([FromForm] CreateCourseRequestDto courseRequestDto)
+        public async Task<IActionResult> Create([FromForm] CreateCourseRequestDto courseDto)
         {
-            if (courseRequestDto.File == null || courseRequestDto.File.Length == 0)
+            if (courseDto.File == null || courseDto.File.Length == 0)
                 return BadRequest("No file uploaded.");
 
-            var course = courseRequestDto.ToCourseFromCreateDto();
-            await _context.Courses.AddAsync(course);
+            var courseModel = courseDto.ToCourseFromCreateDto();
+            await _context.Courses.AddAsync(courseModel);
             await _context.SaveChangesAsync();
 
-
-            var fileName = course.Id.ToString() + Path.GetExtension(courseRequestDto.File.FileName);
+            var fileName = courseModel.Id.ToString() + Path.GetExtension(courseDto.File.FileName);
             var filePath = Path.Combine(_imagePath, fileName);
-
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                await courseRequestDto.File.CopyToAsync(stream);
+                await courseDto.File.CopyToAsync(stream);
             }
 
-
-            course.ImageUrl = fileName;
-            _context.Courses.Update(course);
+            courseModel.ImageUrl = fileName;
+            _context.Courses.Update(courseModel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetByIdCourse), new { courseId = course.Id }, course.ToDto());
+            return CreatedAtAction(nameof(GetByIdCourse), new { courseId = courseModel.Id }, courseModel.ToDto());
         }
+
 
         //endpoint actulizar curso
         [HttpPut("{courseId}")]
-        public async Task<IActionResult> UpdateCourse(int courseId, [FromForm] CreateCourseRequestDto courseRequestDto)
+
+        public async Task<IActionResult> UpdateCourse(int courseId, [FromForm] UpdateCourseRequestDto courseDto)
         {
-
             var course = await _context.Courses.FindAsync(courseId);
-
             if (course == null)
+                return NotFound("Course not found.");
+
+
+            course.Name = courseDto.Name;
+            course.Description = courseDto.Description;
+            course.Schedule = courseDto.Schedule;
+            course.Professor = courseDto.Professor;
+
+
+            if (courseDto.File != null && courseDto.File.Length > 0)
             {
-                return NotFound($"Course with ID {courseId} not found.");
-            }
-
-
-            course.UpdateCourseFromDto(courseRequestDto);
-
-
-            if (courseRequestDto.File != null && courseRequestDto.File.Length > 0)
-            {
-
-                var fileName = course.Id.ToString() + Path.GetExtension(courseRequestDto.File.FileName);
+                var fileName = course.Id.ToString() + Path.GetExtension(courseDto.File.FileName);
                 var filePath = Path.Combine(_imagePath, fileName);
-
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    await courseRequestDto.File.CopyToAsync(stream);
+                    await courseDto.File.CopyToAsync(stream);
                 }
-
 
                 course.ImageUrl = fileName;
             }
 
-            try
-            {
+            _context.Courses.Update(course);
+            await _context.SaveChangesAsync();
 
-                _context.Courses.Update(course);
-                await _context.SaveChangesAsync();
-
-
-                return Ok(new { message = "Curso actualizado correctamente", data = course.ToDto() });
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, new { message = "Hubo un error al actualizar el curso", error = ex.Message });
-            }
+            return Ok(course.ToDto());
         }
-
+       
         //endpoint eliminar un curso
 
         [HttpDelete]
         [Route("{courseId}")]
-        public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)
+        public async Task<IActionResult> Delete([FromRoute] int courseId)
         {
-            var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == courseId);
-
+            var course = await _context.Courses.FirstOrDefaultAsync(_course => _course.Id == courseId);
             if (course  == null)
             {
-                
-                return NotFound(new { message = $"Evento con ID {courseId} no encontrado." });
+                return NotFound();
             }
+            _context.Courses.Remove(course );
 
-            try
-            {
-               
-                _context.Courses.Remove(course);
-                await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-                // Mensaje de éxito
-                return Ok(new { message = $"Evento con ID {courseId} eliminado correctamente." });
-            }
-            catch (Exception ex)
-            {
-               
-                return StatusCode(500, new { message = "Hubo un error al eliminar el evento.", error = ex.Message });
-            }
+            return NoContent();
         }
 
 
