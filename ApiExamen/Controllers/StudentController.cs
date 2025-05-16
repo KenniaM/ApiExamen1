@@ -34,26 +34,45 @@ namespace ApiExamen.Controllers
       return Ok(student.ToDto());
     }
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateStudentRequestDto studentDto)
+public async Task<IActionResult> Create([FromBody] CreateStudentRequestDto studentDto)
+{
+    if (!ModelState.IsValid || studentDto == null)
     {
-      if (!ModelState.IsValid)
-      {
-        return BadRequest(ModelState);
-      }
+        return BadRequest(new { message = "Datos del estudiante inválidos" });
+    }
 
-      try
-      {
+    try
+    {
+        // Validar si el curso existe
+        var course = await _context.Courses.FindAsync(studentDto.CourseId);
+        if (course == null)
+        {
+            return BadRequest(new { message = "El curso asociado no existe" });
+        }
+
+        // Crear estudiante
         var studentModel = studentDto.ToStudentFromCreateDto();
+        studentModel.Course = course;
+
         _context.Students.Add(studentModel);
         await _context.SaveChangesAsync();
 
+        // Enviar notificación 
+        await FirebaseHelper.SendPushNotificationToTopicAsync(
+            topic: "student_notifications",
+            title: "Estudiante registrado!",
+            body: $"Estudiante: \"{studentModel.Name}\", se ha inscrito al curso: \"{course.Name}\""
+        );
+       
         return CreatedAtAction(nameof(GetById), new { id = studentModel.Id }, studentModel.ToDto());
-      }
-      catch (Exception ex)
-      {
-        return StatusCode(500, new { message = "Error al crear el estudiante", error = ex.Message });
-      }
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error al crear estudiante: {ex.Message}");
+        return StatusCode(500, new { message = "Error al crear el estudiante", error = ex.Message });
+    }
+}
+
     
     [HttpGet]
     public async Task<IActionResult> GetAll()
