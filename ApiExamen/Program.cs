@@ -2,6 +2,7 @@ using ApiExamen1.Data;
 
 using Microsoft.Extensions.FileProviders;
 
+
 using Microsoft.EntityFrameworkCore;
 
 
@@ -36,6 +37,13 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "UploadedImages")),
+    RequestPath = "/uploads"
+});
 
 
 var summaries = new[]
