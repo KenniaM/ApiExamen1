@@ -40,10 +40,14 @@ Para la creación de  ApiExamen con .NET estos son los siguientes pasos:
 
   4.  Abrir el archivo .zip llamado "Firebase", luego extraer el archivo y pasar el archivo dentro el proyecto 
       dentro de la carpeta extraída a la carpeta de la api llamada "ApiExamen".
+      
       Hacer donet build después de pasar el archivo de firebase a la carpeta ApiExamen
       
   6. Comandos en orden para levantar el api:
+     
      cd ApiExamen
+     
      dotnet build (Despues de pasar el archivo de firebase a la carpeta ApiExamen)
+     
      dotnet watch run 
 
